@@ -1,0 +1,58 @@
+
+stages:           # List of stages for jobs, and their order of execution backend
+  - build-api
+  - test-api
+  - build-frontend-app
+  - test-frontend-app
+  - deploy-api
+  - deploy-frontend-app
+
+build-api-job:
+  stage: build-api
+  script:
+    - cd api
+    - npm install
+    - npm run build
+
+unit-test-api-job:
+  stage: test-api
+  dependencies:
+    - build-api-job
+  script:
+    - cd api
+    - npm test
+
+lint-test-frontend-app-job:
+  stage: test-frontend-app
+  script:
+    - echo "Linting code... This will take about 10 seconds."
+    - sleep 10
+    - echo "No lint issues found."
+  needs:
+  - build-frontend-app-job
+
+build-frontend-app-job:
+  stage: build-frontend-app
+  script:
+    - echo "Building frontend app..."
+
+deploy-api-job:
+  stage: deploy-api
+  environment:
+    name: production
+  script:
+    - echo "Deploying API..."
+    - echo "API successfully deployed."
+  needs:
+    - unit-test-api-job
+
+deploy-frontend-app-job:
+  stage: deploy-frontend-app
+  environment:
+    name: production
+  script:
+    - echo "Deploying frontend app..."
+    - echo "Frontend app successfully deployed."
+  needs:
+    - lint-test-frontend-app-job
+    - build-frontend-app-job
