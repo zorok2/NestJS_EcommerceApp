@@ -32,7 +32,6 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly queryBus: QueryBus,
     private readonly jwtService: JWTService,
-
     private readonly bcryptService: BCryptService,
     private readonly cryptoService: CryptoService,
   ) {}

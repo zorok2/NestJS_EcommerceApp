@@ -25,10 +25,15 @@ import { CreateUserDto } from '../dto/request/create-users.dto';
 import { FindUserLoginQuery } from '../queries/find-user-login.query';
 import { CryptoService } from 'src/lib/utils/ rsa.service';
 import { UserRepository } from '../repositories/user.repository';
+import { AddAddressDto } from '../dto/request/add-address.dto';
+import { AuthService } from './auth.service';
+import { ReviewService } from './review.service';
+import { AddAddressUserCommand } from '../commands/add-addressUser.command';
 
 @Injectable()
 export class UserService {
   constructor(
+    private readonly review: ReviewService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly userRepository: UserRepository,
@@ -46,6 +51,7 @@ export class UserService {
   ): ResponseBase {
     return new ResponseBase(status, message, data);
   }
+
   async createUser(userData: CreateUserDto, avatar?): Promise<ResponseBase> {
     try {
       const findUser = await this.userRepository.findByUserName(
@@ -241,5 +247,21 @@ export class UserService {
   async getPermission(userId: string): Promise<any> {
     const user = await this.queryBus.execute(new GetAccountByIdQuery(userId));
     return user.Permission.name;
+  }
+
+  async addAddressUser(userAddressDto: AddAddressDto): Promise<any> {
+    try {
+     
+      const result = await this.commandBus.execute(
+        new AddAddressUserCommand(userAddressDto),
+      );
+      return new ResponseBase(
+        ResponseStatus.Success,
+        'Thêm địa chỉ thành công',
+        result,
+      );
+    } catch (error) {
+      return this.createResponseBase(ResponseStatus.Failure, error.message);
+    }
   }
 }

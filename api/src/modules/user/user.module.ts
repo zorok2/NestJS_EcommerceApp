@@ -36,6 +36,7 @@ import { Review } from 'src/entities/user/review.entity';
     forwardRef(() => OrderModule),
     UtilsModule,
     JwtModule,
+    UserModule,
     ProxyModule,
     CqrsModule,
     SharedModule,

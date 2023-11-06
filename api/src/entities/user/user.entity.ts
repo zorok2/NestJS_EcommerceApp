@@ -84,6 +84,12 @@ export class Address {
   @Column()
   address: string;
 
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({ nullable: true })
+  nameUserShipping: string;
+
   @Column()
   location: string;
 }

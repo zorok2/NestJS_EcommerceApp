@@ -1,3 +1,4 @@
+import { async } from 'rxjs';
 /* eslint-disable prettier/prettier */
 import { CreateUserDto } from './../dto/request/create-users.dto';
 import {
@@ -33,6 +34,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { AddAddressDto } from '../dto/request/add-address.dto';
 
 @ApiTags('User Endpoint')
 @Controller('user')
@@ -91,6 +93,12 @@ export class UserController {
   async updateUser(@Body() userData: UpdateUserDto) {
     const user = await this.userService.updateUser(userData);
     return user;
+  }
+
+  @Post('address')
+  async addAddressUser(@Body() userAddress: AddAddressDto) {
+    const data = await this.userService.addAddressUser(userAddress);
+    return data;
   }
 
   @ApiOperation({
