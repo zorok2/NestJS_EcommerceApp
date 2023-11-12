@@ -66,7 +66,7 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.product)
   category: Category;
 
-  @ManyToOne(() => ProductType, (product) => product.product)
+  @ManyToOne(() => ProductType, (productType) => productType.product)
   productType: ProductType;
 
   @ManyToOne(() => Provider, (provider) => provider.product)

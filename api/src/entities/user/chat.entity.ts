@@ -1,5 +1,11 @@
 /* eslint-disable prettier/prettier */
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Column,
+  Timestamp,
+} from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
@@ -7,15 +13,15 @@ export class Chat {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  userSend: string;
+  @ManyToOne(() => User, (user) => user.chatSend)
+  userSend: User;
 
-  @Column()
-  userReceive: string;
+  @ManyToOne(() => User, (user) => user.chatReceive)
+  userReceive: User;
 
   @Column()
   message: string;
 
   @Column()
-  time: string;
+  time: Date;
 }

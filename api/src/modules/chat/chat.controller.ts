@@ -1,26 +1,32 @@
 /* eslint-disable prettier/prettier */
-import { Body, Get, Post, Query } from '@nestjs/common';
+import { Body, Get, Param, Post, Query } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
-import { ChatService } from './chat.service';
 import { Chat } from 'src/entities/user/chat.entity';
+import { chatDto, getChatDto } from '../user/dto/request/user-login.dto';
+import { ChatService } from './chat.service';
 
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  @Get()
-  async getChatMessages(
-    @Query('userId') userId: string,
-    @Query('pageSize') pageSize: number,
-    @Query('page') page: number,
-  ) {
-    const message = this.chatService.getMessage(userId, page, pageSize);
+  @Get('/message')
+  async getChatMessages(@Body() getChatDto: getChatDto) {
+    const message = this.chatService.getMessage(
+      getChatDto.username,
+      getChatDto.page,
+      getChatDto.pageSize,
+    );
     return message;
   }
 
+  @Get('/list')
+  async getList(@Body() getChatDto: getChatDto) {
+    return this.chatService.getListAccountMessage(getChatDto.username);
+  }
+
   @Post()
-  async createChatMessage(@Body() chatMessage: Chat) {
-    return await this.chatService.createChatMessage(chatMessage);
+  async createChatMessage(@Body() chatDto: chatDto) {
+    return await this.chatService.createChatMessage(chatDto);
   }
 }

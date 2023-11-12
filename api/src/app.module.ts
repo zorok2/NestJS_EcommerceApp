@@ -34,9 +34,7 @@ import { SharedModule } from './shared/shared.module';
       inject: [ConfigService],
       useFactory: TypeOrmPostgresConfig,
     }),
-
     SharedModule,
-
     ProductModule,
     OrderModule,
     UserModule,
