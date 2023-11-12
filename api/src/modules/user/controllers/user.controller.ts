@@ -95,12 +95,6 @@ export class UserController {
     return user;
   }
 
-  @Post('address')
-  async addAddressUser(@Body() userAddress: AddAddressDto) {
-    const data = await this.userService.addAddressUser(userAddress);
-    return data;
-  }
-
   @ApiOperation({
     summary:
       '[[ADMIN, CUSTOMER, STAFF, INVENTORY_MANAGEMENT]] Can update their account',

@@ -1,3 +1,4 @@
+import { AddressController } from './address.controller';
 import { AuthController } from './auth.controller';
 import { PermissionController } from './permission.controller';
 import { ReviewController } from './review.controller';
@@ -7,5 +8,6 @@ export const UserControllers = [
   UserController,
   AuthController,
   PermissionController,
-  ReviewController
+  ReviewController,
+  AddressController,
 ];

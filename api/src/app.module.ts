@@ -53,12 +53,12 @@ import { SharedModule } from './shared/shared.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AutheticatedRequestMiddleware, AuthorizationRequestMiddleware)
-      .forRoutes({
-        path: '*',
-        method: RequestMethod.ALL,
-      });
+    // consumer
+    //   .apply( AuthorizationRequestMiddleware)
+    //   .forRoutes({
+    //     path: '*',
+    //     method: RequestMethod.ALL,
+    //   });
   }
 }
 //implements NestModule

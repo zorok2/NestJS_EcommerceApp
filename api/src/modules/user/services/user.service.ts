@@ -29,6 +29,7 @@ import { AddAddressDto } from '../dto/request/add-address.dto';
 import { AuthService } from './auth.service';
 import { ReviewService } from './review.service';
 import { AddAddressUserCommand } from '../commands/add-addressUser.command';
+import { GetAddressUserQuery } from '../queries/get-address-user.query';
 
 @Injectable()
 export class UserService {
@@ -50,6 +51,19 @@ export class UserService {
     data?: any,
   ): ResponseBase {
     return new ResponseBase(status, message, data);
+  }
+
+  async getAddressUser(userId: string): Promise<ResponseBase> {
+    try {
+      const add = await this.queryBus.execute(new GetAddressUserQuery(userId));
+      return new ResponseBase(
+        ResponseStatus.Success,
+        'Get address for user successfully',
+        add,
+      );
+    } catch (error) {
+      return this.createResponseBase(ResponseStatus.Failure, error.message);
+    }
   }
 
   async createUser(userData: CreateUserDto, avatar?): Promise<ResponseBase> {
@@ -251,7 +265,6 @@ export class UserService {
 
   async addAddressUser(userAddressDto: AddAddressDto): Promise<any> {
     try {
-     
       const result = await this.commandBus.execute(
         new AddAddressUserCommand(userAddressDto),
       );
