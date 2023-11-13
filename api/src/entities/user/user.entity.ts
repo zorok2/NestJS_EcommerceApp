@@ -10,6 +10,7 @@ import {
 import { Order } from '../product/order.entity';
 import { Cart } from '../product/cart.entity';
 import { Review } from './review.entity';
+import { Chat } from './chat.entity';
 // import { Review } from '../review/review.entity';
 @Entity()
 export class Permission {
@@ -71,6 +72,12 @@ export class User {
 
   @OneToMany(() => Review, (review) => review.user)
   review: Review[];
+
+  @OneToMany(() => Chat, (chat) => chat.userReceive)
+  chatReceive: Chat[];
+
+  @OneToMany(() => Chat, (chat) => chat.userSend)
+  chatSend: Chat[];
 }
 
 @Entity()

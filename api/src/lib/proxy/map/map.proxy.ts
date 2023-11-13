@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
+import axios from 'axios';
 
 @Injectable()
 export class MapProxy {
@@ -10,8 +11,8 @@ export class MapProxy {
   constructor(private readonly httpClient: HttpService) {}
 
   async getDistance(destination: string, origin: string) {
-    const apiKey = 'AIzaSyCw1cqjgzByj2kxDDWAsa4_GKkwu09rPXI';
-    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${origin}&destinations=${destination}&key=${apiKey}&language=vi&region=VN&query`;
+    const apiKey = '44UvhQS2PY0PW4NjVU7OeI4CQ1C2gczYXDfxvl6t';
+    const url = `https://rsapi.goong.io/DistanceMatrix?origins=${origin}&destinations=${destination}&vehicle=car&api_key=${apiKey}`;
     try {
       const response = await this.httpClient.get(url).toPromise();
       if (response.status === 200) {
@@ -19,8 +20,7 @@ export class MapProxy {
         const rows = data['rows'] as Array<any>;
         const elements = rows[0]['elements'] as Array<any>;
         const distanceElement = elements[0]['distance'];
-        //const durationElement = elements[0]['duration'] as { text: string };
-        return distanceElement;
+        return distanceElement.value;
         // do something with distanceElement.text and durationElement.text
       } else {
         // handle non-200 response
@@ -43,7 +43,6 @@ export class MapProxy {
     if (locations.length > 0) {
       const latitude = locations[0].latitude;
       const longitude = locations[0].longitude;
-      //console.log(`${latitude.toFixed(2)}/${longitude.toFixed(2)}`);
       console.log(locations);
       console.log(latitude.toFixed(4));
       return latitude + ', ' + longitude;
@@ -51,5 +50,28 @@ export class MapProxy {
     // else {
     //   return null;
     // }
+  }
+
+  async getLocation(address: string): Promise<any> {
+    const apiKey = '44UvhQS2PY0PW4NjVU7OeI4CQ1C2gczYXDfxvl6t';
+    const url = `https://rsapi.goong.io/geocode?address=${address}&api_key=${apiKey}`;
+    console.log(url);
+    try {
+      const response = await this.httpClient.get(url).toPromise();
+      if (response.status === 200) {
+        const data = response.data;
+        console.log(data);
+        const elements = data.results[0];
+        const { formatted_address, geometry } = elements;
+        const { lat, lng } = geometry.location;
+        console.log(elements);
+        return lat + ',' + lng;
+        // do something with distanceElement.text and durationElement.text
+      } else {
+        // handle non-200 response
+      }
+    } catch (error) {
+      // handle error
+    }
   }
 }

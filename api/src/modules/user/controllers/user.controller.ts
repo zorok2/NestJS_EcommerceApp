@@ -35,11 +35,16 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AddAddressDto } from '../dto/request/add-address.dto';
+import { MapProxy } from 'src/lib/proxy/map/map.proxy';
+import { addressDTO, getDistance } from '../dto/request/user-login.dto';
 
 @ApiTags('User Endpoint')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly mapProxy: MapProxy,
+  ) {}
   private readonly logger = new Logger(UserController.name);
 
   @ApiHeader({
@@ -161,5 +166,15 @@ export class UserController {
   @UseGuards()
   getProfile(@Req() req: any) {
     return req.user;
+  }
+
+  @Get('/address')
+  async getLocation(@Body() addressDTO: addressDTO): Promise<any> {
+    return this.mapProxy.getLocation(addressDTO.address);
+  }
+
+  @Get('/distance')
+  async getDistance(@Body() getDistanDto: getDistance): Promise<any> {
+    return this.mapProxy.getDistance(getDistanDto.desti, getDistanDto.origin);
   }
 }

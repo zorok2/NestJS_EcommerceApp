@@ -47,10 +47,19 @@ export class UserRepository {
   }
 
   //Find User By Username
-  async findByUserName(userName: string): Promise<User> {
+  async findByUserName(userName: string) {
     const options: FindOneOptions<User> = {
       select: ['id', 'fullname', 'email', 'username', 'phone', 'avatarUrl'],
 
+      where: {
+        username: userName,
+      },
+    };
+    return this.userRepository.findOne(options);
+  }
+
+  async findByUserNameChat(userName: string) {
+    const options: FindOneOptions<User> = {
       where: {
         username: userName,
       },

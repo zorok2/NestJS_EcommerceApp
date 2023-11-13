@@ -1,6 +1,6 @@
+/* eslint-disable prettier/prettier */
 import { OrderModule } from './../order/order.module';
 import { ProductModule } from './../product/product.module';
-/* eslint-disable prettier/prettier */
 import { PassportModule } from '@nestjs/passport';
 import { Module, forwardRef } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -20,6 +20,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserQueryHandlers } from './queries';
 import { JWTService } from './services/jwt.service';
 import { Review } from 'src/entities/user/review.entity';
+import { ChatRepository } from '../chat/chat.repository';
+import { Chat } from 'src/entities/user/chat.entity';
 @Module({
   imports: [
     // PassportModule.register({
@@ -40,7 +42,7 @@ import { Review } from 'src/entities/user/review.entity';
     ProxyModule,
     CqrsModule,
     SharedModule,
-    TypeOrmModule.forFeature([User, Address, Permission, Review]),
+    TypeOrmModule.forFeature([User, Address, Permission, Review, Chat]),
   ],
   providers: [
     ...UserRepositories,
@@ -49,6 +51,12 @@ import { Review } from 'src/entities/user/review.entity';
     ...UserQueryHandlers,
   ],
   controllers: [...UserControllers],
-  exports: [UserRepository, UserService, PermissionRepository, JWTService],
+  exports: [
+    UserRepository,
+    UserService,
+    PermissionRepository,
+    JWTService,
+    ChatRepository,
+  ],
 })
 export class UserModule {}
