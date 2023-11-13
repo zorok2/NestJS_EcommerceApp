@@ -92,4 +92,7 @@ export class Address {
 
   @Column({ nullable: true })
   location: string;
+
+  @Column({ nullable: true, default: false })
+  isDefault: boolean;
 }
