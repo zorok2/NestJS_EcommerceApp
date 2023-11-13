@@ -48,6 +48,7 @@
     "geocoding": "^1.0.5",
     "joi": "^17.9.1",
     "nestjs": "^0.0.1",
+    "nestjs-form-data": "^1.9.1",
     "node-geocoder": "^4.2.0",
     "node-open-geocoder": "^4.0.1",
     "node-rsa": "^1.1.1",

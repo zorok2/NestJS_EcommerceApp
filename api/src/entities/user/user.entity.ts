@@ -90,6 +90,6 @@ export class Address {
   @Column({ nullable: true })
   nameUserShipping: string;
 
-  @Column()
+  @Column({ nullable: true })
   location: string;
 }

@@ -265,6 +265,8 @@ export class UserService {
 
   async addAddressUser(userAddressDto: AddAddressDto): Promise<any> {
     try {
+      this.logger.debug('debug service address ' + userAddressDto.address);
+
       const result = await this.commandBus.execute(
         new AddAddressUserCommand(userAddressDto),
       );
