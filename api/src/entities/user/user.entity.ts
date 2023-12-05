@@ -91,6 +91,8 @@ export class Address {
   @Column()
   address: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   location: string;
 }

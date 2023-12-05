@@ -1,12 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
-import {
-  Body,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Logger, Param, Put, Query } from '@nestjs/common';
+import { Body, Post, UseGuards } from '@nestjs/common';
 import { OrderService } from '../services/order.service';
-import { CreateOrderDto } from '../dto/create-order.dto';
+import { CreateOrderDto, UpdateStatusDto } from '../dto/create-order.dto';
 
 @Controller('order')
 export class OrderController {
@@ -44,5 +40,10 @@ export class OrderController {
   @Post()
   async createOrder(@Body() order: CreateOrderDto) {
     return this.orderService.createOrder(order);
+  }
+
+  @Put('/update')
+  async updateOrderStatus(@Body() order: UpdateStatusDto) {
+    return this.orderService.updateStatusOrder(order);
   }
 }

@@ -94,29 +94,47 @@ export class ChatService {
         }
       }
       console.log(uniqueUsers.length);
-      const users = new Array<User>();
-      for (let index = 0; index < uniqueUsers.length; index++) {
-        const user1 = uniqueUsers[index];
-        let flag = 0;
-        if (users.length != 0) {
-          for (let index1 = 0; index1 < users.length; index1++) {
-            const user2 = users[index1];
-            if (user1.id != user2.id) {
-              flag = 1;
-            } else flag = 0;
-          }
-          if (flag == 1) {
-            users.push(user1);
-          }
-        } else users.push(user1);
+      const temp = this.filteredChats(result);
+      const finalResult = Array<User>();
+      for (let index = 0; index < temp.length; index++) {
+        if (temp[index].userReceive.username != username) {
+          finalResult.push(temp[index].userReceive);
+        }
+        if (temp[index].userSend.username != username) {
+          finalResult.push(temp[index].userSend);
+        }
       }
       return this.createResponseBase(
         ResponseStatus.Success,
         'Get List Account Message successfully',
-        users,
+        finalResult,
       );
     } catch (error) {
       return this.createResponseBase(ResponseStatus.Failure, error.message);
     }
+  }
+  filteredChats(chats: Chat[]): Chat[] {
+    const userPairs: string[] = [];
+    return chats
+      .filter((chat) => {
+        // Sort IDs and join into string
+        const ids = [chat.userSend.id, chat.userReceive.id].sort();
+        const pairKey = ids.join('-');
+
+        if (!userPairs.includes(pairKey)) {
+          userPairs.push(pairKey);
+          return true;
+        }
+
+        return false;
+      })
+      .filter((chat) => {
+        // Only keep chats where receiver is not user1
+        if (chat.userSend.id !== 'admin') {
+          return true;
+        }
+
+        return false;
+      });
   }
 }
