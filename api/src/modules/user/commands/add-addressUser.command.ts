@@ -25,6 +25,7 @@ export class AddAddressUserCommandHandler
     this.logger.debug('debug address ' + command.addressUserDto.address);
     var ad = new Address();
     ad.id = v4();
+    ad.location = command.addressUserDto.location;
     ad.address = command.addressUserDto.address;
     ad.phone = command.addressUserDto.Sdt;
     ad.user = await this.userRepository.findById(command.addressUserDto.userID);

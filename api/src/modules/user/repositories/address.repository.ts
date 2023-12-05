@@ -17,7 +17,7 @@ export class AddressRepository {
   async findAll(): Promise<Address[]> {
     return this.addressRepository.find();
   }
-  async findAdressByUserId(userId: string): Promise<any> {
+  async findAdressByUserId(userId: string): Promise<Address[]> {
     this.logger.debug(userId);
     // const data = await this.addressRepository.find();
     const addresses = await this.addressRepository.find({

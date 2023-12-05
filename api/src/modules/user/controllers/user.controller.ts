@@ -168,9 +168,11 @@ export class UserController {
     return req.user;
   }
 
-  @Get('/address')
-  async getLocation(@Body() addressDTO: addressDTO): Promise<any> {
-    return this.mapProxy.getLocation(addressDTO.address);
+  @Get('/address/:name')
+  async getLocation(@Param('name') address: string): Promise<any> {
+    return {
+      location: await this.mapProxy.getLocation(address),
+    };
   }
 
   @Get('/distance')

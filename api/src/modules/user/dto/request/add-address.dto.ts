@@ -13,4 +13,7 @@ export class AddAddressDto {
 
   @IsNotEmpty()
   address: string;
+
+  @IsNotEmpty()
+  location: string;
 }
