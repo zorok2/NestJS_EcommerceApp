@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { ActivePermissionCommandHandler } from './active-permission.command';
+import { AddAddressUserCommandHandler } from './add-addressUser.command';
 import { CreatePermissionCommandHandler } from './create-permission.conmmand';
 import { CreateReviewCommandHandler } from './create_review.command';
 import { InvalidPermissionCommandHandler } from './invalid-permission.command';
@@ -21,4 +22,5 @@ export const UserCommands = [
   InvalidPermissionCommandHandler,
   ActivePermissionCommandHandler,
   CreateReviewCommandHandler,
+  AddAddressUserCommandHandler,
 ];

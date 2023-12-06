@@ -38,6 +38,7 @@ import { Chat } from 'src/entities/user/chat.entity';
     forwardRef(() => OrderModule),
     UtilsModule,
     JwtModule,
+    UserModule,
     ProxyModule,
     CqrsModule,
     SharedModule,

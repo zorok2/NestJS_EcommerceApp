@@ -25,16 +25,25 @@ import { CreateUserDto } from '../dto/request/create-users.dto';
 import { FindUserLoginQuery } from '../queries/find-user-login.query';
 import { CryptoService } from 'src/lib/utils/ rsa.service';
 import { UserRepository } from '../repositories/user.repository';
+import { AddAddressDto } from '../dto/request/add-address.dto';
+import { AuthService } from './auth.service';
+import { ReviewService } from './review.service';
+import { AddAddressUserCommand } from '../commands/add-addressUser.command';
+import { GetAddressUserQuery } from '../queries/get-address-user.query';
+import { Address } from 'src/entities/user/user.entity';
+import { AddressRepository } from '../repositories/address.repository';
 
 @Injectable()
 export class UserService {
   constructor(
+    private readonly review: ReviewService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly userRepository: UserRepository,
+    private readonly addressRepository: AddressRepository,
     private readonly cryptoServicea: CryptoService,
     private readonly firebaseService: FirebaseService,
-    private readonly bcryptService: BCryptService,
+    private readonly bcryptService: BCryptService, // private readonly authService: AuthService,
   ) {}
 
   private readonly logger = new Logger(UserService.name);
@@ -46,6 +55,71 @@ export class UserService {
   ): ResponseBase {
     return new ResponseBase(status, message, data);
   }
+  async addAddressUser(userAddressDto: AddAddressDto): Promise<any> {
+    try {
+      this.logger.debug('debug service address ' + userAddressDto.address);
+
+      const result = await this.commandBus.execute(
+        new AddAddressUserCommand(userAddressDto),
+      );
+      return new ResponseBase(
+        ResponseStatus.Success,
+        'Thêm địa chỉ thành công',
+        result,
+      );
+    } catch (error) {
+      return this.createResponseBase(ResponseStatus.Failure, error.message);
+    }
+  }
+  async updateStatusAddress(addressId, userId) {
+    try {
+      var addresses = await this.queryBus.execute(
+        new GetAddressUserQuery(userId),
+      );
+      this.logger.debug('data address' + JSON.stringify(addresses));
+
+      for (const address of addresses) {
+        if (address['id'] === addressId) {
+          address['isDefault'] = true;
+        } else {
+          address['isDefault'] = false;
+        }
+        await this.addressRepository.updateAddress(address);
+      }
+    } catch (error) {
+      // Handle error
+    }
+  }
+
+  // async updateStatusAddress(addressId, userId) {
+  //   try {
+  //     var add = await this.queryBus.execute(new GetAddressUserQuery(userId));
+  //     this.logger.debug('data address' + JSON.stringify(add));
+  //     add.forEach((element) => {
+  //       if (element['id'] != addressId) {
+  //         element['isDefault'] = false;
+  //         this.addressRepository.updateAddress(element);
+  //       } else if (element['id'] == addressId) {
+  //         element['isDefault'] = true;
+  //         this.addressRepository.updateAddress(element);
+  //       }
+  //     });
+  //   } catch (error) {}
+  // }
+
+  async getAddressUser(userId: string): Promise<ResponseBase> {
+    try {
+      const add = await this.queryBus.execute(new GetAddressUserQuery(userId));
+      return new ResponseBase(
+        ResponseStatus.Success,
+        'Get address for user successfully',
+        add,
+      );
+    } catch (error) {
+      return this.createResponseBase(ResponseStatus.Failure, error.message);
+    }
+  }
+
   async createUser(userData: CreateUserDto, avatar?): Promise<ResponseBase> {
     try {
       const findUser = await this.userRepository.findByUserName(

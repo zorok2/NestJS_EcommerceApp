@@ -30,8 +30,10 @@ export class CartService {
     addProductToCartDto: AddProductToCartDto,
     request: Request,
   ) => {
-    const userId = request['userMetadata'].userId;
-    Logger.log('UserID nè: ' + userId);
+    // const userId = request['userMetadata'].userId;
+    const userId = addProductToCartDto.userId;
+
+    // Logger.log('UserID nè: ' + userId);
     try {
       const commandResult = await this.commandBus.execute(
         new AddProductToCartCommand(userId, addProductToCartDto),

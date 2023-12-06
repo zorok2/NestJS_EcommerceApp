@@ -12,6 +12,10 @@ export class AddProductRequest {
 }
 export class AddProductToCartDto {
   @IsNotEmpty({
+    message: 'UserId id required!',
+  })
+  userId: string;
+  @IsNotEmpty({
     message: 'List product id required!',
   })
   @ApiProperty({

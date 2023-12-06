@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { stringify } from 'querystring';
 import { Address } from 'src/entities/user/user.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 
@@ -15,6 +16,16 @@ export class AddressRepository {
 
   async findAll(): Promise<Address[]> {
     return this.addressRepository.find();
+  }
+  async findAdressByUserId(userId: string): Promise<Address[]> {
+    this.logger.debug(userId);
+    // const data = await this.addressRepository.find();
+    const addresses = await this.addressRepository.find({
+      where: { user: { id: userId } },
+    });
+    this.logger.debug('data ' + JSON.stringify(addresses));
+
+    return addresses;
   }
 
   async findById(addressId: string): Promise<Address> {

@@ -1,3 +1,4 @@
+import { async } from 'rxjs';
 /* eslint-disable prettier/prettier */
 import { CreateUserDto } from './../dto/request/create-users.dto';
 import {
@@ -33,6 +34,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { AddAddressDto } from '../dto/request/add-address.dto';
 import { MapProxy } from 'src/lib/proxy/map/map.proxy';
 import { addressDTO, getDistance } from '../dto/request/user-login.dto';
 
@@ -166,9 +168,11 @@ export class UserController {
     return req.user;
   }
 
-  @Get('/address')
-  async getLocation(@Body() addressDTO: addressDTO): Promise<any> {
-    return this.mapProxy.getLocation(addressDTO.address);
+  @Get('/address/:name')
+  async getLocation(@Param('name') address: string): Promise<any> {
+    return {
+      location: await this.mapProxy.getLocation(address),
+    };
   }
 
   @Get('/distance')

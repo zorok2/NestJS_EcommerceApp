@@ -38,7 +38,7 @@ export class CartController {
     @Body() addProductToCartDto: AddProductToCartDto,
     @Req() request,
   ): Promise<ResponseBase> {
-    Logger.debug('REQUEST USER ' + request['userMetadata'].userId);
+    // Logger.debug('REQUEST USER ' + request['userMetadata'].userId);
     // Logger.debug(' USER ' + request.userId);
 
     return this.cartService.addProductToCart(addProductToCartDto, request);

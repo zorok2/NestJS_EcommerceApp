@@ -24,7 +24,7 @@ export class CreateReviewCommandHandler
     private readonly userRepository: UserRepository,
     private readonly productRepository: ProductRepository,
   ) {}
-  7;
+  
   async execute(command: CreateReviewCommand): Promise<any> {
     const review = new Review();
     review.comment = command.createReviewDto.comment;

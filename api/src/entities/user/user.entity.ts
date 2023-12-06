@@ -91,8 +91,15 @@ export class Address {
   @Column()
   address: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({ nullable: true })
+  nameUserShipping: string;
+
+  @Column({ nullable: true })
   location: string;
+
+  @Column({ nullable: true, default: false })
+  isDefault: boolean;
 }
