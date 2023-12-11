@@ -7,10 +7,15 @@ import { ApiOperation } from '@nestjs/swagger';
 import { Chat } from 'src/entities/user/chat.entity';
 import { chatDto } from '../user/dto/request/user-login.dto';
 import { ChatService } from './chat.service';
+import { Server } from 'http';
+// import { WebSocketServer } from '@nestjs/websockets';
 
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
+
+  // @WebSocketServer()
+  // private readonly server: Server;
 
   @Get('/message/:username')
   async getChatMessages(@Param('username') username: string) {
@@ -20,7 +25,7 @@ export class ChatController {
     return message;
   }
 
-  @Get('/list')
+  @Get('/list/:username')
   async getList(@Param('username') username: string) {
     console.log(username);
     return this.chatService.getListAccountMessage(username);
@@ -28,10 +33,8 @@ export class ChatController {
 
   @Post()
   async createChatMessage(@Body() chatDto: chatDto) {
-    console.log('run create chat');
-    console.log(chatDto.userSend);
-    console.log(chatDto.userReceive);
-    console.log(chatDto.message);
-    return await this.chatService.createChatMessage(chatDto);
+    const newChatMessage = await this.chatService.createChatMessage(chatDto);
+    //this.server.emit('newChatMessage', newChatMessage);
+    return newChatMessage;
   }
 }
