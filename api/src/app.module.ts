@@ -22,6 +22,7 @@ import { AuthorizationRequestMiddleware } from './lib/middlewares/authorization.
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppConfig } from './lib/configs/application.config';
 import { SharedModule } from './shared/shared.module';
+import { ChatGateway } from './modules/chat/chat.gateway';
 
 @Module({
   imports: [
