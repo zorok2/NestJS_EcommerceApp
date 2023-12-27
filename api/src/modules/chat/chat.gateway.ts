@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { ChatService } from 'src/modules/chat/chat.service';
 import {
+  ConnectedSocket,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
@@ -26,16 +27,16 @@ export class ChatGateway
   private readonly server: Server;
 
   @SubscribeMessage('sendMessage')
-  async handleSendMessage(client: Socket, payload: chatDto): Promise<void> {
-    await this.chatService.createChatMessage(payload);
+  async handleSendMessage(payload: chatDto): Promise<void> {
+    //await this.chatService.createChatMessage(payload);
     this.server.emit('recMessage', payload);
   }
 
-  handleConnection(client: Socket) {
+  handleConnection(@ConnectedSocket() client: Socket) {
     console.log(`Client connected: ${client.id}`);
   }
 
-  handleDisconnect(client: Socket) {
+  handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log(`Client disconnected: ${client.id}`);
   }
 

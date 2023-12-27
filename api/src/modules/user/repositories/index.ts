@@ -5,6 +5,7 @@ import { PermissionRepository } from './permission.repository';
 import { ReviewRepository } from './review.repository';
 import { UserRepository } from './user.repository';
 import { ChatRepository } from 'src/modules/chat/chat.repository';
+import { ChatGateway } from 'src/modules/chat/chat.gateway';
 
 export const UserRepositories = [
   UserRepository,

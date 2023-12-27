@@ -22,6 +22,7 @@ import { JWTService } from './services/jwt.service';
 import { Review } from 'src/entities/user/review.entity';
 import { ChatRepository } from '../chat/chat.repository';
 import { Chat } from 'src/entities/user/chat.entity';
+import { Server } from 'http';
 @Module({
   imports: [
     // PassportModule.register({
@@ -49,6 +50,7 @@ import { Chat } from 'src/entities/user/chat.entity';
     ...UserServices,
     ...UserCommands,
     ...UserQueryHandlers,
+    Server,
   ],
   controllers: [...UserControllers],
   exports: [
