@@ -27,7 +27,7 @@ export class ChatRepository {
         { userSend: { username: username } },
       ],
 
-      order: { time: 'DESC' },
+      order: { time: 'ASC' },
       relations: { userReceive: true, userSend: true },
     });
   }

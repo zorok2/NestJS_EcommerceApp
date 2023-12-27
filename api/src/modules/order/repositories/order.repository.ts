@@ -50,6 +50,12 @@ export class OrderRepository {
     return this.orderRepository.save(order);
   }
 
+  async updateStatus(orderId: string, status: string): Promise<Order> {
+    const order = await this.findById(orderId);
+    order.status = status;
+    return this.orderRepository.save(order);
+  }
+
   async deleteById(id: string): Promise<void> {
     await this.orderRepository.delete(id);
   }

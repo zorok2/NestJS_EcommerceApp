@@ -22,6 +22,9 @@ import { AuthorizationRequestMiddleware } from './lib/middlewares/authorization.
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppConfig } from './lib/configs/application.config';
 import { SharedModule } from './shared/shared.module';
+import { ChatGateway } from './modules/chat/chat.gateway';
+import { AppGateway } from './app.gateway';
+import { ChatService } from './modules/chat/chat.service';
 
 @Module({
   imports: [
@@ -47,7 +50,7 @@ import { SharedModule } from './shared/shared.module';
     ConfigModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [AppGateway, ChatService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

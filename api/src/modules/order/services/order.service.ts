@@ -11,7 +11,7 @@ import { UpdateOrderStatusCommand } from '../commands/update-order-status.comman
 import { CreateOrderCommand } from '../commands/create-order.command';
 import { UpdateOrderDto } from '../dto/update-order-status.dto';
 import { MapProxy } from 'src/lib/proxy/map/map.proxy';
-import { CreateOrderDto } from '../dto/create-order.dto';
+import { CreateOrderDto, UpdateStatusDto } from '../dto/create-order.dto';
 import { InventoryService } from 'src/modules/inventory/services/inventory.service';
 
 @Injectable()
@@ -20,8 +20,7 @@ export class OrderService {
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly mapProxy: MapProxy,
-    private readonly inventoryService: InventoryService,
-    // private readonly httpService: HttpService,
+    private readonly inventoryService: InventoryService, // private readonly httpService: HttpService,
   ) {}
 
   private readonly logger = new Logger(OrderService.name);
@@ -64,10 +63,22 @@ export class OrderService {
     return this.commandBus.execute(new CreateOrderCommand(order));
   }
 
-  updateStatusOrder(updateStatusOrder: UpdateOrderDto): Promise<any> {
-    return this.commandBus.execute(
-      new UpdateOrderStatusCommand(updateStatusOrder.id, updateStatusOrder.status),
-    );
+  updateStatusOrder(updateStatusOrder: UpdateStatusDto) {
+    try {
+      const message = this.commandBus.execute(
+        new UpdateOrderStatusCommand(
+          updateStatusOrder.orderId,
+          updateStatusOrder.status,
+        ),
+      );
+      return new ResponseBase(
+        ResponseStatus.Success,
+        'Update Status Successfully!',
+        message,
+      );
+    } catch (error) {
+      return this.createResponseBase(ResponseStatus.Failure, error.message);
+    }
   }
   testFilterException() {
     try {
@@ -95,7 +106,4 @@ export class OrderService {
       return this.createResponseBase(ResponseStatus.Failure, error.message);
     }
   }
-
-
-  
 }

@@ -1,4 +1,3 @@
-import { async } from 'rxjs';
 /* eslint-disable prettier/prettier */
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -39,7 +38,10 @@ export class ProductService {
     return new ResponseBase(status, message, data);
   }
 
-  async filterProductByPrice(orderByName: string, category?: string): Promise<ResponseBase> {
+  async filterProductByPrice(
+    orderByName: string,
+    category?: string,
+  ): Promise<ResponseBase> {
     try {
       const products = await this.queryBus.execute(
         new FilterProductOrderByPrice(orderByName, category),

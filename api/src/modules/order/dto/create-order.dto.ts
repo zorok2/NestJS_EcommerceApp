@@ -12,3 +12,9 @@ export class CreateOrderDto {
 
   location: string;
 }
+
+export class UpdateStatusDto {
+  orderId: string;
+
+  status: string;
+}
