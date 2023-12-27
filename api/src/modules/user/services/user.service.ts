@@ -32,6 +32,8 @@ import { AddAddressUserCommand } from '../commands/add-addressUser.command';
 import { GetAddressUserQuery } from '../queries/get-address-user.query';
 import { Address } from 'src/entities/user/user.entity';
 import { AddressRepository } from '../repositories/address.repository';
+import { GetUserByEmailQuery } from '../queries/get-user-byEmail';
+import { UpdatePassworDto } from '../dto/update_password.dto';
 
 @Injectable()
 export class UserService {
@@ -91,22 +93,6 @@ export class UserService {
     }
   }
 
-  // async updateStatusAddress(addressId, userId) {
-  //   try {
-  //     var add = await this.queryBus.execute(new GetAddressUserQuery(userId));
-  //     this.logger.debug('data address' + JSON.stringify(add));
-  //     add.forEach((element) => {
-  //       if (element['id'] != addressId) {
-  //         element['isDefault'] = false;
-  //         this.addressRepository.updateAddress(element);
-  //       } else if (element['id'] == addressId) {
-  //         element['isDefault'] = true;
-  //         this.addressRepository.updateAddress(element);
-  //       }
-  //     });
-  //   } catch (error) {}
-  // }
-
   async getAddressUser(userId: string): Promise<ResponseBase> {
     try {
       const add = await this.queryBus.execute(new GetAddressUserQuery(userId));
@@ -117,6 +103,45 @@ export class UserService {
       );
     } catch (error) {
       return this.createResponseBase(ResponseStatus.Failure, error.message);
+    }
+  }
+
+  async getUserByEmail(email: string): Promise<ResponseBase> {
+    try {
+      const add = await this.queryBus.execute(new GetUserByEmailQuery(email));
+      if (add != null) {
+        return new ResponseBase(
+          ResponseStatus.Success,
+          'Get user by email successfully',
+          add,
+        );
+      }
+      return this.createResponseBase(ResponseStatus.Failure, 'Fail to get user');
+    } catch (error) {
+      return this.createResponseBase(ResponseStatus.Failure, error.message);
+    }
+  }
+  async UpdatePassword(update: UpdatePassworDto): Promise<ResponseBase> {
+    const user = await this.queryBus.execute(new GetAccountByIdQuery(update.userId));
+    try {
+      const newPassword = await this.bcryptService.hashPassWord(update.newPass);
+
+      const result = await this.commandBus.execute(
+        new ChangePasswordCommand(update.userId, newPassword),
+      );
+      if (result != null) {
+        return new ResponseBase(
+          ResponseStatus.Success,
+          'Update user successfully!',
+          result,
+        );
+      }
+    } catch (error) {
+      throw new ResponseBase(
+        ResponseStatus.Failure,
+        'Update user fail',
+        error.message,
+      );
     }
   }
 

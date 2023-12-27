@@ -37,6 +37,7 @@ import {
 import { AddAddressDto } from '../dto/request/add-address.dto';
 import { MapProxy } from 'src/lib/proxy/map/map.proxy';
 import { addressDTO, getDistance } from '../dto/request/user-login.dto';
+import { UpdatePassworDto } from '../dto/update_password.dto';
 
 @ApiTags('User Endpoint')
 @Controller('user')
@@ -93,10 +94,20 @@ export class UserController {
     const user = await this.userService.getUserByUsername(username);
     return user;
   }
+  @Get('email/:email')
+  async getUserByEmail(@Param('email') email: string) {
+    const user = await this.userService.getUserByEmail(email);
+    return user;
+  }
 
   @Put('update')
   async updateUser(@Body() userData: UpdateUserDto) {
     const user = await this.userService.updateUser(userData);
+    return user;
+  }
+  @Put('updatePassword')
+  async updateUserPassword(@Body() userUpdate: UpdatePassworDto) {
+    const user = await this.userService.UpdatePassword(userUpdate);
     return user;
   }
 

@@ -11,6 +11,7 @@ import {
   GetAllReviewQueryHandler,
 } from './get-all-review.query';
 import { GetAddressUserQueryHandler } from './get-address-user.query';
+import { GetUserByEmailQueryHandler } from './get-user-byEmail';
 
 export const UserQueryHandlers = [
   FindUserLoginQueryHandler,
@@ -21,4 +22,5 @@ export const UserQueryHandlers = [
   GetOnePermissionQueryHandler,
   GetAllReviewQueryHandler,
   GetAddressUserQueryHandler,
+  GetUserByEmailQueryHandler,
 ];

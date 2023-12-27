@@ -24,6 +24,15 @@ export class UserRepository {
       relations: { addresses: true, permission: true },
     });
   }
+  async findUserByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        email: email,
+      },
+      select: ['id', 'fullname', 'email', 'username', 'phone', 'avatarUrl'],
+      relations: { addresses: true, permission: true },
+    });
+  }
 
   //Find User By Id
   async findById(id: string): Promise<User> {
@@ -104,6 +113,17 @@ export class UserRepository {
       where: {
         id: userId,
       },
+    };
+    const user = await this.userRepository.findOne(option);
+    user.password = newPass;
+    return this.userRepository.save(user);
+  }
+  async updatePassword(userId: string, newPass: string): Promise<User> {
+    const option: FindOneOptions<User> = {
+      where: {
+        id: userId,
+      },
+      select: ['id', 'fullname', 'email', 'username', 'phone', 'avatarUrl'],
     };
     const user = await this.userRepository.findOne(option);
     user.password = newPass;
